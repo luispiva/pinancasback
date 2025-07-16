@@ -7,17 +7,17 @@ import bcrypt from "bcrypt";
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Pra resolver __dirname no ES module
+// Resolve __dirname no ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve arquivos estáticos do frontend
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-
-
 const app = express();
+
 app.use(cors());
 app.use(bodyParser.json());
+
+// Serve arquivos estáticos do frontend
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 const USERS_FILE = './api/users.json';
 const SECRET = "segredo_supersecreto_do_jwt";
@@ -105,6 +105,11 @@ app.post('/api/despesas', authenticate, (req, res) => {
   users[userIndex].despesas = despesas;
   saveUsers(users);
   res.json({ message: 'Despesa adicionada com sucesso' });
+});
+
+// Rota coringa para o React (SPA)
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
 });
 
 export default app;
