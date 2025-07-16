@@ -4,6 +4,16 @@ import bodyParser from "body-parser";
 import fs from "fs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Pra resolver __dirname no ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve arquivos estáticos do frontend
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
+
 
 const app = express();
 app.use(cors());
